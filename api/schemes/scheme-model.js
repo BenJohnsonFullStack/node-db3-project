@@ -168,9 +168,15 @@ function findSteps(scheme_id) {
   */
 }
 
-function add(scheme) {
+async function add(scheme) {
+  await db("schemes").insert(scheme);
+  return scheme;
+
   // EXERCISE D
   /*
+
+
+
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
 }
