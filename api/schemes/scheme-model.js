@@ -36,25 +36,21 @@ async function findById(scheme_id) {
     .select("scheme_name", "st.*", "sc.scheme_id")
     .orderBy("step_number");
 
-  const result = rows.reduce(
-    (acc, row) => {
-      if (row.instructions) {
-        acc.steps.push({
-          step_id: row.step_id,
-          step_number: row.step_number,
-          instructions: row.instructions,
-        });
-        return acc;
-      } else {
-        return acc;
-      }
-    },
-    {
-      scheme_id: rows[0].scheme_id,
-      scheme_name: rows[0].scheme_name,
-      steps: [],
+  const result = {
+    scheme_id: rows[0].scheme_id,
+    scheme_name: rows[0].scheme_name,
+    steps: [],
+  };
+
+  rows.forEach((row) => {
+    if (row.step_id) {
+      result.steps.push({
+        step_id: row.step_id,
+        step_number: row.step_number,
+        instructions: row.instructions,
+      });
     }
-  );
+  });
 
   return result;
   // EXERCISE B
@@ -185,7 +181,7 @@ async function addStep(scheme_id, step) {
   return db("steps")
     .insert({ ...step, scheme_id })
     .then(() => {
-      return db("steps").where("scheme_id", scheme_id);
+      return db("steps").where("scheme_id", scheme_id).orderBy("step_number");
     });
 
   // EXERCISE E
