@@ -170,7 +170,7 @@ function findSteps(scheme_id) {
 
 async function add(scheme) {
   const [id] = await db("schemes").insert(scheme);
-  return db("schemes").where("schemes.scheme_id", id).first();
+  return db("schemes").where("scheme_id", id).first();
 
   // EXERCISE D
   /*
@@ -181,9 +181,27 @@ async function add(scheme) {
   */
 }
 
-function addStep(scheme_id, step) {
+async function addStep(scheme_id, step) {
+  return db("steps")
+    .insert({ ...step, scheme_id })
+    .then(() => {
+      return db("steps").where("scheme_id", scheme_id);
+    });
+
   // EXERCISE E
   /*
+
+    SELECT
+          scheme_name,
+          step_id,
+          step_number,
+          instructions
+      FROM schemes as sc
+      RIGHT JOIN steps as st
+          ON sc.scheme_id = st.scheme_id
+          WHERE sc.scheme_id = 1
+      ORDER BY step_number;
+
     1E- This function adds a step to the scheme with the given `scheme_id`
     and resolves to _all the steps_ belonging to the given `scheme_id`,
     including the newly created one.

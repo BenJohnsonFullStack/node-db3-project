@@ -65,6 +65,8 @@ const validateStep = (req, res, next) => {
     step_number < 1
   ) {
     next({ status: 400, message: "invalid step" });
+  } else {
+    next();
   }
 };
 
