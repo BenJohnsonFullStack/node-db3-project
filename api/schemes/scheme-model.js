@@ -36,8 +36,27 @@ async function findById(scheme_id) {
     .select("scheme_name", "st.*")
     .orderBy("step_number", "asc");
 
-  return rows;
+  let result = rows.reduce(
+    (acc, row) => {
+      if (row.instructions) {
+        acc.steps.push({
+          step_id: row.step_id,
+          step_number: row.step_number,
+          instructions: row.instructions,
+        });
+        return acc;
+      } else {
+        return acc;
+      }
+    },
+    {
+      scheme_id: rows[0].scheme_id,
+      scheme_name: rows[0].scheme_name,
+      steps: [],
+    }
+  );
 
+  return result;
   // EXERCISE B
   /*
     1B- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`:
