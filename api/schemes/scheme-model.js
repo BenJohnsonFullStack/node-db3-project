@@ -33,10 +33,10 @@ async function findById(scheme_id) {
   const rows = await db("schemes as sc")
     .leftJoin("steps as st", "sc.scheme_id", "=", "st.scheme_id")
     .where("sc.scheme_id", scheme_id)
-    .select("scheme_name", "st.*")
-    .orderBy("step_number", "asc");
+    .select("scheme_name", "st.*", "sc.scheme_id")
+    .orderBy("step_number");
 
-  let result = rows.reduce(
+  const result = rows.reduce(
     (acc, row) => {
       if (row.instructions) {
         acc.steps.push({
