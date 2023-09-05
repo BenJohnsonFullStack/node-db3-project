@@ -6,7 +6,7 @@ async function find() {
     .count("st.step_id as number_of_steps")
     .groupBy("sc.scheme_id")
     .select("sc.*")
-    .orderBy("sc.scheme_id", "asc");
+    .orderBy("sc.scheme_id");
 
   return rows;
 
